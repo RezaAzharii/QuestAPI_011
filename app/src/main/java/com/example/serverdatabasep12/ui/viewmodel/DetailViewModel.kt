@@ -19,4 +19,31 @@ sealed class DetailUiState {
     object Loading : DetailUiState()
 }
 
+class DetailViewModel(
+    savedStateHandle: SavedStateHandle,
+    private val mhs: MahasiswaRepository
+) : ViewModel() {
 
+    var mahasiswaDetailState: DetailUiState by mutableStateOf(DetailUiState.Loading)
+        private set
+
+    private val _nim: String = checkNotNull(savedStateHandle[DestinasiDetail.NIM])
+
+    init {
+        getMahasiswabyNim()
+    }
+
+    fun getMahasiswabyNim() {
+        viewModelScope.launch {
+            mahasiswaDetailState = DetailUiState.Loading
+            mahasiswaDetailState = try {
+                val mahasiswa = mhs.getMahasiswabyNim(_nim)
+                DetailUiState.Success(mahasiswa)
+            } catch (e: IOException) {
+                DetailUiState.Error
+            } catch (e: HttpException) {
+                DetailUiState.Error
+            }
+        }
+    }
+}
