@@ -43,5 +43,27 @@ fun PengelolaHalaman(
                 }
             )
         }
+        composable(
+            DestinasiDetail.routesWithArg,
+            arguments = listOf(
+                navArgument(DestinasiDetail.NIM){
+                    type = NavType.StringType
+                }
+            )
+        ){
+            val nim = it.arguments?.getString(DestinasiDetail.NIM)
+            nim?.let { nim ->
+                DetailScreen(
+                    navigateToItemUpdate = {},
+                    navigateBack = {
+                        navController.navigate(DestinasiHome.route) {
+                            popUpTo(DestinasiHome.route) {
+                                inclusive = true
+                            }
+                        }
+                    }
+                )
+            }
+        }
     }
 }
