@@ -5,9 +5,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -16,15 +22,56 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.serverdatabasep12.model.Mahasiswa
 import com.example.serverdatabasep12.ui.navigation.DestinasiNavigasi
 import com.example.serverdatabasep12.ui.viewmodel.DetailUiState
+import com.example.serverdatabasep12.ui.viewmodel.DetailViewModel
+import com.example.serverdatabasep12.ui.viewmodel.PenyediaViewModel
+import com.example.serverdatabasep12.ui.widget.CostumeTopAppBar
 
 object DestinasiDetail: DestinasiNavigasi{
     override val route = "detail"
     override val titleRes = "Detail Mhs"
     const val NIM = "nim"
     val routesWithArg = "$route/{$NIM}"
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DetailScreen(
+    navigateBack: () -> Unit,
+    navigateToItemUpdate: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: DetailViewModel = viewModel(factory = PenyediaViewModel.Factory)
+) {
+    Scaffold(
+        topBar = {
+            CostumeTopAppBar(
+                title = DestinasiDetail.titleRes,
+                canNavigateBack = true,
+                navigateUp = navigateBack
+            )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = navigateToItemUpdate,
+                shape = MaterialTheme.shapes.medium,
+                modifier = Modifier.padding(18.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = "Edit Kontak"
+                )
+            }
+        }
+    ) { innerPadding ->
+        DetailStatus(
+            modifier = Modifier.padding(innerPadding),
+            detailUiState = viewModel.mahasiswaDetailState,
+            retryAction = { viewModel.getMahasiswabyNim() }
+        )
+    }
 }
 
 @Composable
