@@ -25,4 +25,18 @@ class UpdateViewModel (
                 .toUiStateMhs()
         }
     }
+
+    fun updateInsertMhsState(insertUiEvent: InsertUiEvent){
+        updateUiState = InsertUiState(insertUiEvent = insertUiEvent)
+    }
+
+    suspend fun updateMhs(){
+        viewModelScope.launch {
+            try {
+                mhs.updateMahasiswa(_nim, updateUiState.insertUiEvent.toMhs())
+            }catch (e: Exception){
+                e.printStackTrace()
+            }
+        }
+    }
 }
