@@ -50,7 +50,10 @@ fun DetailScreen(
             CostumeTopAppBar(
                 title = DestinasiDetail.titleRes,
                 canNavigateBack = true,
-                navigateUp = navigateBack
+                navigateUp = navigateBack,
+                onRefresh = {
+                    viewModel.getMahasiswabyNim()
+                }
             )
         },
         floatingActionButton = {
