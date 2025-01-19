@@ -1,12 +1,14 @@
 package com.example.serverdatabasep12.repository
 
+import com.example.serverdatabasep12.model.AllMahasiswaResponse
 import com.example.serverdatabasep12.model.Mahasiswa
+import com.example.serverdatabasep12.model.MahasiswaDetailResponse
 import com.example.serverdatabasep12.service_api.MahasiswaService
 import okio.IOException
 
 interface MahasiswaRepository{
     suspend fun insertMahasiswa(mahasiswa: Mahasiswa)
-    suspend fun getMahasiswa(): List<Mahasiswa>
+    suspend fun getMahasiswa(): AllMahasiswaResponse
     suspend fun getMahasiswabyNim(nim: String): Mahasiswa
     suspend fun updateMahasiswa(nim: String, mahasiswa: Mahasiswa)
     suspend fun deleteMahasiswa(nim: String)
@@ -19,11 +21,11 @@ class NetworkKontakRepository(
         kontakApiService.insertMahasiswa(mahasiswa)
     }
 
-    override suspend fun getMahasiswa(): List<Mahasiswa> =
+    override suspend fun getMahasiswa(): AllMahasiswaResponse =
         kontakApiService.getAllMahasiswa()
 
     override suspend fun getMahasiswabyNim(nim: String): Mahasiswa {
-        return kontakApiService.getMahasiswabyNim(nim)
+        return kontakApiService.getMahasiswabyNim(nim).data
     }
 
     override suspend fun updateMahasiswa(nim: String, mahasiswa: Mahasiswa) {
